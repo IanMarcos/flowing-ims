@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity @Table
 @Getter @Setter @ToString
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor
 public class Brand {
 
   @Id
@@ -30,5 +30,9 @@ public class Brand {
 
   @Column
   private boolean enabled;
+
+  public Brand() {
+    enabled = true;
+  }
 }
 

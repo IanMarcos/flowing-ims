@@ -1,6 +1,7 @@
 package com.ianmarcos.flowingims.controller;
 
 import com.ianmarcos.flowingims.entity.Product;
+import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,22 +25,19 @@ public class ProductController {
 
   @GetMapping("/{id}")
   public Product getById(@PathVariable int id) {
-    // TODO 404 in case of null
     return productService.findById(id);
   }
 
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
   public Product createProduct(@RequestBody Product newProduct) {
-    // TODO Error handler for duplicate product names
     return productService.save(newProduct);
   }
 
   @PutMapping("/{id}")
   public Product updateProduct(@RequestBody Product product, @PathVariable int id) {
     if (id <= 0) {
-      // TODO send bad request/404
-      return null;
+      throw new ResourceNotFoundException("The product doesn't exist");
     }
 
     return productService.update(product, id);
@@ -48,8 +46,7 @@ public class ProductController {
   @DeleteMapping("/{id}")
   public void deleteProduct(@PathVariable int id) {
     if (id <= 0) {
-      // TODO send bad request/404
-      return;
+      throw new ResourceNotFoundException("The product doesn't exist");
     }
 
     productService.delete(id);

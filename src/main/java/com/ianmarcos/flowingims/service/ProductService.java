@@ -2,6 +2,7 @@ package com.ianmarcos.flowingims.service;
 
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.entity.Product;
+import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.repository.BrandRepository;
 import com.ianmarcos.flowingims.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
+  private final String productNotFoundMessage = "The product doesn't exist or is not active";
   private ProductRepository productRepository;
   private BrandRepository brandRepository;
 
@@ -28,8 +30,7 @@ public class ProductService {
     Optional<Product> product = productRepository.findByIdAndEnabledTrue(id);
 
     if (product.isEmpty()) {
-      // TODO 404
-      return null;
+      throw new ResourceNotFoundException(productNotFoundMessage);
     }
 
     return product.get();
@@ -40,7 +41,7 @@ public class ProductService {
       int inputBrandId = product.getBrand().getId();
       Optional<Brand> dbBrand = brandRepository.findById(inputBrandId); // TODO update called method
 
-      if (dbBrand.isPresent()) {
+      if (dbBrand.isPresent()) { //TODO validate sku
         product.setBrand(dbBrand.get());
       } else {
         product.setBrand(null);
@@ -53,8 +54,7 @@ public class ProductService {
     Optional<Product> optionalProduct = productRepository.findByIdAndEnabledTrue(id);
 
     if (optionalProduct.isEmpty()) {
-      // TODO 404
-      return null;
+      throw new ResourceNotFoundException(productNotFoundMessage);
     }
 
     Product dbProd = optionalProduct.get();
@@ -69,12 +69,12 @@ public class ProductService {
   public void delete(int id) {
     Optional<Product> optProduct = productRepository.findByIdAndEnabledTrue(id);
 
-    if (optProduct.isPresent()) {
-      Product product = optProduct.get();
-      product.setEnabled(false);
-      productRepository.save(product);
-    } else {
-      // TODO 404
+    if (optProduct.isEmpty()) {
+      throw new ResourceNotFoundException(productNotFoundMessage);
     }
+
+    Product product = optProduct.get();
+    product.setEnabled(false);
+    productRepository.save(product);
   }
 }

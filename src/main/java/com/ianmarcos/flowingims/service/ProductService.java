@@ -27,19 +27,13 @@ public class ProductService {
   }
 
   public Product findById(int id) {
-    Optional<Product> product = productRepository.findByIdAndEnabledTrue(id);
-
-    if (product.isEmpty()) {
-      throw new ResourceNotFoundException(productNotFoundMessage);
-    }
-
-    return product.get();
+    return this.fetchProduct(id);
   }
 
   public Product save(Product product) {
     if (product.getBrand() != null) {
       int inputBrandId = product.getBrand().getId();
-      Optional<Brand> dbBrand = brandRepository.findById(inputBrandId); // TODO update called method
+      Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(inputBrandId);
 
       if (dbBrand.isPresent()) { //TODO validate sku
         product.setBrand(dbBrand.get());
@@ -51,30 +45,26 @@ public class ProductService {
   }
 
   public Product update(Product product, int id) {
-    Optional<Product> optionalProduct = productRepository.findByIdAndEnabledTrue(id);
-
-    if (optionalProduct.isEmpty()) {
-      throw new ResourceNotFoundException(productNotFoundMessage);
-    }
-
-    Product dbProd = optionalProduct.get();
+    Product dbProduct = this.fetchProduct(id);
 
     product.setId(id);
-    product.setCreatedAt(dbProd.getCreatedAt());
-    product.setEnabled(dbProd.isEnabled());
+    product.setCreatedAt(dbProduct.getCreatedAt());
+    product.setEnabled(dbProduct.isEnabled());
 
     return this.save(product);
   }
 
   public void delete(int id) {
-    Optional<Product> optProduct = productRepository.findByIdAndEnabledTrue(id);
-
-    if (optProduct.isEmpty()) {
-      throw new ResourceNotFoundException(productNotFoundMessage);
-    }
-
-    Product product = optProduct.get();
+    Product product = this.fetchProduct(id);
     product.setEnabled(false);
     productRepository.save(product);
+  }
+
+  private Product fetchProduct(int id) {
+    Optional<Product> dbProduct = productRepository.findByIdAndEnabledTrue(id);
+    if (dbProduct.isEmpty()) {
+      throw new ResourceNotFoundException("The product doesn't exist or is not active");
+    }
+    return dbProduct.get();
   }
 }

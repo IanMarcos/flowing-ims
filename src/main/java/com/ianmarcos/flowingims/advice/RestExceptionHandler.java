@@ -2,19 +2,23 @@ package com.ianmarcos.flowingims.advice;
 
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.util.ErrorResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.Set;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
 
   @ExceptionHandler
-  public ResponseEntity<ErrorResponse> handleNotFoundException(ResourceNotFoundException exception) {
+  public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException exception) {
     ErrorResponse error = new ErrorResponse();
 
     error.setStatus(HttpStatus.NOT_FOUND.value());
@@ -25,7 +29,7 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
-  public ResponseEntity<ErrorResponse> handleUniqueConstraintException(DataIntegrityViolationException exception) {
+  public ResponseEntity<ErrorResponse> handleUniqueConstraint(DataIntegrityViolationException exception) {
     String errorMessage = exception.getMessage();
     ErrorResponse error = new ErrorResponse();
 
@@ -40,6 +44,43 @@ public class RestExceptionHandler {
     }
 
     return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler
+  public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException exception) {
+    Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
+    ErrorResponse error = new ErrorResponse();
+    StringBuilder errorMessage = new StringBuilder("Badly formatted fields:");
+
+    for(ConstraintViolation<?> violation : violations) {
+      errorMessage.append(" ")
+          .append(violation.getPropertyPath()).append(" ")
+          .append(violation.getMessage()).append(".");
+    }
+
+    error.setStatus(HttpStatus.BAD_REQUEST.value());
+    error.setMessage(errorMessage.toString());
+    error.setTimeStamp(Instant.now());
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+    Object[] messageArguments = exception.getDetailMessageArguments();
+    ErrorResponse error = new ErrorResponse();
+    StringBuilder errorMessage = new StringBuilder("Badly formatted fields:");
+
+    assert messageArguments != null;
+    for (Object arg: messageArguments) {
+      if (!arg.toString().isEmpty()) {
+        errorMessage.append(" ").append(arg).append(".");
+      }
+    }
+
+    error.setStatus(HttpStatus.BAD_REQUEST.value());
+    error.setMessage(errorMessage.toString());
+    error.setTimeStamp(Instant.now());
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler

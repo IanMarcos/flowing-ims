@@ -1,6 +1,8 @@
 package com.ianmarcos.flowingims.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,6 +20,8 @@ public class Brand {
   private int id;
 
   @Column
+  @Size(min = 3, max = 50)
+  @NotNull
   private String name;
 
   @Column(name = "created_at")

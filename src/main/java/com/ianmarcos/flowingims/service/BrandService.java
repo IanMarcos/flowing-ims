@@ -30,10 +30,6 @@ public class BrandService {
   }
 
   public Brand updateName(int id, String newName) {
-    if (newName.trim().isEmpty()) { // TODO function to validate all strings
-      return null; // TODO BadParamException
-    }
-
     Brand brand = this.fetchBrand(id);
     brand.setName(newName);
     return brandRepository.save(brand);

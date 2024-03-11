@@ -3,6 +3,7 @@ package com.ianmarcos.flowingims.controller;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.service.BrandService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,10 @@ public class BrandController {
 
   @GetMapping("/{id}")
   public Brand getById(@PathVariable int id) {
+    if (id <= 0) {
+      throw new ResourceNotFoundException("The brand doesn't exist");
+    }
+
     return brandService.findById(id);
   }
 
@@ -35,9 +40,9 @@ public class BrandController {
   }
 
   @PatchMapping("/{id}")
-  public Brand updateBrand(@RequestBody Brand brand, @PathVariable int id) {
+  public Brand updateBrand(@Valid @RequestBody Brand brand, @PathVariable int id) {
     if (id <= 0) {
-      throw new ResourceNotFoundException("The product doesn't exist");
+      throw new ResourceNotFoundException("The brand doesn't exist");
     }
 
     return brandService.updateName(id, brand.getName());
@@ -46,7 +51,7 @@ public class BrandController {
   @DeleteMapping("/{id}")
   public void deleteBrand(@PathVariable int id) {
     if (id <= 0) {
-      throw new ResourceNotFoundException("The product doesn't exist");
+      throw new ResourceNotFoundException("The brand doesn't exist");
     }
 
     brandService.delete(id);

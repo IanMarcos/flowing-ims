@@ -1,6 +1,9 @@
 package com.ianmarcos.flowingims.entity;
 
+import com.ianmarcos.flowingims.validation.ProductIdentification;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,6 +13,7 @@ import java.util.Date;
 @Entity @Table
 @Getter @Setter @ToString
 @AllArgsConstructor
+@ProductIdentification
 public class Product {
 
   @Id
@@ -18,6 +22,8 @@ public class Product {
   private int id;
 
   @Column
+  @NotNull
+  @Size(min = 3, max = 200)
   private String name;
 
   @ManyToOne
@@ -25,12 +31,15 @@ public class Product {
   private Brand brand;
 
   @Column
+  @Size(max = 1000)
   private String description;
 
   @Column
+  @Size(min = 6, max = 40)
   private String sku;
 
   @Column
+  @Size(min = 12, max = 14)
   private String upc;
 
   @Column(name = "created_at")
@@ -41,7 +50,7 @@ public class Product {
   @UpdateTimestamp
   private Date updatedAt;
 
-  @Column(columnDefinition = "boolean default true")
+  @Column
   private boolean enabled;
 
   public Product() {

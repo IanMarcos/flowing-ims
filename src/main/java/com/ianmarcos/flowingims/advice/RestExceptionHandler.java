@@ -73,7 +73,7 @@ public class RestExceptionHandler {
     assert messageArguments != null;
     for (Object arg: messageArguments) {
       if (!arg.toString().isEmpty()) {
-        errorMessage.append(" ").append(arg).append(".");
+        errorMessage.append(" ").append(arg);
       }
     }
 

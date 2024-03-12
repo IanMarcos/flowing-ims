@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class RestExceptionHandler {
 
   @ExceptionHandler
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException exception) {
     ErrorResponse error = new ErrorResponse();
 
@@ -29,6 +31,7 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
+  @ResponseStatus(HttpStatus.CONFLICT)
   public ResponseEntity<ErrorResponse> handleUniqueConstraint(DataIntegrityViolationException exception) {
     String errorMessage = exception.getMessage();
     ErrorResponse error = new ErrorResponse();
@@ -47,6 +50,7 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException exception) {
     Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
     ErrorResponse error = new ErrorResponse();
@@ -65,6 +69,7 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
     Object[] messageArguments = exception.getDetailMessageArguments();
     ErrorResponse error = new ErrorResponse();
@@ -84,6 +89,7 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<ErrorResponse> handleAnyException(Exception exception) {
 
     ErrorResponse error = new ErrorResponse();

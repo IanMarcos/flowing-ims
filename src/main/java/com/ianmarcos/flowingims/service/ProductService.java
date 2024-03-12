@@ -14,8 +14,8 @@ import java.util.Optional;
 public class ProductService {
 
   private final String productNotFoundMessage = "The product doesn't exist or is not active";
-  private ProductRepository productRepository;
-  private BrandRepository brandRepository;
+  private final ProductRepository productRepository;
+  private final BrandRepository brandRepository;
 
   public ProductService(ProductRepository productRepository, BrandRepository brandRepository) {
     this.productRepository = productRepository;
@@ -35,7 +35,7 @@ public class ProductService {
       int inputBrandId = product.getBrand().getId();
       Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(inputBrandId);
 
-      if (dbBrand.isPresent()) { //TODO validate sku
+      if (dbBrand.isPresent()) {
         product.setBrand(dbBrand.get());
       } else {
         product.setBrand(null);

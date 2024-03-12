@@ -1,8 +1,10 @@
 package com.ianmarcos.flowingims.service;
 
+import com.ianmarcos.flowingims.dto.ProductDTO;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.entity.Product;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
+import com.ianmarcos.flowingims.mapper.ProductMapper;
 import com.ianmarcos.flowingims.repository.BrandRepository;
 import com.ianmarcos.flowingims.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,14 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-  private final String productNotFoundMessage = "The product doesn't exist or is not active";
   private final ProductRepository productRepository;
   private final BrandRepository brandRepository;
+  private final ProductMapper productMapper;
 
-  public ProductService(ProductRepository productRepository, BrandRepository brandRepository) {
+  public ProductService(ProductRepository productRepository, BrandRepository brandRepository, ProductMapper productMapper) {
     this.productRepository = productRepository;
     this.brandRepository = brandRepository;
+    this.productMapper = productMapper;
   }
 
   public List<Product> findAll() {
@@ -30,7 +33,8 @@ public class ProductService {
     return this.fetchProduct(id);
   }
 
-  public Product save(Product product) {
+  public Product save(ProductDTO productDTO) {
+    Product product = productMapper.toProduct(productDTO);
     if (product.getBrand() != null) {
       int inputBrandId = product.getBrand().getId();
       Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(inputBrandId);
@@ -44,14 +48,15 @@ public class ProductService {
     return productRepository.save(product);
   }
 
-  public Product update(Product product, int id) {
+  public Product update(ProductDTO productDTO, int id) {
+    Product product = productMapper.toProduct(productDTO);
     Product dbProduct = this.fetchProduct(id);
 
     product.setId(id);
     product.setCreatedAt(dbProduct.getCreatedAt());
     product.setEnabled(dbProduct.isEnabled());
 
-    return this.save(product);
+    return productRepository.save(product);
   }
 
   public void delete(int id) {

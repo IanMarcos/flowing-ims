@@ -1,7 +1,9 @@
 package com.ianmarcos.flowingims.service;
 
+import com.ianmarcos.flowingims.dto.BrandDTO;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
+import com.ianmarcos.flowingims.mapper.BrandMapper;
 import com.ianmarcos.flowingims.repository.BrandRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class BrandService {
 
   private final BrandRepository brandRepository;
+  private final BrandMapper brandMapper;
 
-  public BrandService(BrandRepository brandRepository) {
+  public BrandService(BrandRepository brandRepository, BrandMapper brandMapper) {
     this.brandRepository = brandRepository;
+    this.brandMapper = brandMapper;
   }
 
   public List<Brand> findAll() {
@@ -25,7 +29,8 @@ public class BrandService {
     return this.fetchBrand(id);
   }
 
-  public Brand save(Brand brand) {
+  public Brand save(BrandDTO newBrand) {
+    Brand brand = brandMapper.toBrand(newBrand);
     return brandRepository.save(brand);
   }
 

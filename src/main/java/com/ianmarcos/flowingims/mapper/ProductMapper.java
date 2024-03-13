@@ -1,10 +1,12 @@
 package com.ianmarcos.flowingims.mapper;
 
-import com.ianmarcos.flowingims.dto.ProductDTO;
+import com.ianmarcos.flowingims.dto.NewBaseProductDTO;
 import com.ianmarcos.flowingims.entity.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(uses = BrandMapper.class)
 public interface ProductMapper {
-  Product toProduct(ProductDTO product);
+  @Mapping(source = "brandId", target = "brand.id")
+  Product newBaseProductToProduct(NewBaseProductDTO newBaseProductDTO);
 }

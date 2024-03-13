@@ -1,6 +1,6 @@
 package com.ianmarcos.flowingims.controller;
 
-import com.ianmarcos.flowingims.dto.ProductDTO;
+import com.ianmarcos.flowingims.dto.NewBaseProductDTO;
 import com.ianmarcos.flowingims.entity.Product;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.service.ProductService;
@@ -47,7 +47,7 @@ public class ProductController {
   )
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
-  public Product createProduct(@RequestBody ProductDTO newProduct) {
+  public Product createProduct(@RequestBody NewBaseProductDTO newProduct) {
     return productService.save(newProduct);
   }
 
@@ -56,7 +56,7 @@ public class ProductController {
       description = "Updates a product with the provided properties. A not provided property will update to null"
   )
   @PutMapping("/{id}")
-  public Product updateProduct(@Valid @RequestBody ProductDTO product, @PathVariable int id) {
+  public Product updateProduct(@Valid @RequestBody NewBaseProductDTO product, @PathVariable int id) {
     if (id <= 0) {
       throw new ResourceNotFoundException("The product doesn't exist");
     }

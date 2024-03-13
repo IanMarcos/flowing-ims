@@ -1,6 +1,6 @@
 package com.ianmarcos.flowingims.service;
 
-import com.ianmarcos.flowingims.dto.ProductDTO;
+import com.ianmarcos.flowingims.dto.NewBaseProductDTO;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.entity.Product;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
@@ -33,8 +33,8 @@ public class ProductService {
     return this.fetchProduct(id);
   }
 
-  public Product save(ProductDTO productDTO) {
-    Product product = productMapper.toProduct(productDTO);
+  public Product save(NewBaseProductDTO newBaseProductDTO) {
+    Product product = productMapper.newBaseProductToProduct(newBaseProductDTO);
     if (product.getBrand() != null) {
       int inputBrandId = product.getBrand().getId();
       Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(inputBrandId);
@@ -48,8 +48,8 @@ public class ProductService {
     return productRepository.save(product);
   }
 
-  public Product update(ProductDTO productDTO, int id) {
-    Product product = productMapper.toProduct(productDTO);
+  public Product update(NewBaseProductDTO newBaseProductDTO, int id) {
+    Product product = productMapper.newBaseProductToProduct(newBaseProductDTO);
     Product dbProduct = this.fetchProduct(id);
 
     product.setId(id);

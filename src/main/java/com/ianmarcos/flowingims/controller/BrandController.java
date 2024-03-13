@@ -1,6 +1,6 @@
 package com.ianmarcos.flowingims.controller;
 
-import com.ianmarcos.flowingims.dto.BrandDTO;
+import com.ianmarcos.flowingims.dto.NewBrandDTO;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.service.BrandService;
@@ -51,7 +51,7 @@ public class BrandController {
   )
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
-  public Brand createBrand(@RequestBody BrandDTO newBrand) {
+  public Brand createBrand(@RequestBody NewBrandDTO newBrand) {
     return brandService.save(newBrand);
   }
 
@@ -59,7 +59,7 @@ public class BrandController {
       summary = "Update a brand's name"
   )
   @PatchMapping("/{id}")
-  public Brand updateBrand(@Valid @RequestBody BrandDTO newBrand, @PathVariable int id) {
+  public Brand updateBrand(@Valid @RequestBody NewBrandDTO newBrand, @PathVariable int id) {
     if (id <= 0) {
       throw new ResourceNotFoundException("The brand doesn't exist");
     }

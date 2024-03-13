@@ -1,6 +1,6 @@
 package com.ianmarcos.flowingims.service;
 
-import com.ianmarcos.flowingims.dto.BrandDTO;
+import com.ianmarcos.flowingims.dto.NewBrandDTO;
 import com.ianmarcos.flowingims.entity.Brand;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.mapper.BrandMapper;
@@ -29,8 +29,8 @@ public class BrandService {
     return this.fetchBrand(id);
   }
 
-  public Brand save(BrandDTO newBrand) {
-    Brand brand = brandMapper.toBrand(newBrand);
+  public Brand save(NewBrandDTO newBrand) {
+    Brand brand = brandMapper.newBrandDtoToBrand(newBrand);
     return brandRepository.save(brand);
   }
 

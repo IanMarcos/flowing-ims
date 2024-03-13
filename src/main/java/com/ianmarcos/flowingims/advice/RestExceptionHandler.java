@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -86,6 +87,20 @@ public class RestExceptionHandler {
     error.setMessage(errorMessage.toString());
     error.setTimeStamp(Instant.now());
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  }
+
+  //JpaObjectRetrievalFailureException
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ResponseEntity<ErrorResponse> handleAnyException(JpaObjectRetrievalFailureException exception) {
+
+    ErrorResponse error = new ErrorResponse();
+    String errorMessage = exception.getMessage().replace("com.ianmarcos.flowingims.entity.", "");
+
+    error.setStatus(HttpStatus.NOT_FOUND.value());
+    error.setMessage(errorMessage);
+    error.setTimeStamp(Instant.now());
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler

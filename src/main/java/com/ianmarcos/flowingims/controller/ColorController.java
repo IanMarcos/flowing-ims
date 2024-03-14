@@ -17,7 +17,7 @@ import java.util.List;
 @Tag(name = "Color")
 public class ColorController {
 
-  private ColorService colorService;
+  private final ColorService colorService;
 
   public ColorController(ColorService colorService) {
     this.colorService = colorService;

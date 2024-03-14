@@ -13,8 +13,8 @@ import java.util.Optional;
 @Service
 public class ColorService {
 
-  private ColorRepository colorRepository;
-  private ColorMapper colorMapper;
+  private final ColorRepository colorRepository;
+  private final ColorMapper colorMapper;
 
   public ColorService(ColorRepository colorRepository, ColorMapper colorMapper) {
     this.colorRepository = colorRepository;

@@ -89,7 +89,6 @@ public class RestExceptionHandler {
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
-  //JpaObjectRetrievalFailureException
   @ExceptionHandler
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleAnyException(JpaObjectRetrievalFailureException exception) {

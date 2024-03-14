@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewBrandDTO {
+public class ObjectWithNameDTO {
   @Size(min = 3, max = 50)
   @NotNull
   private String name;

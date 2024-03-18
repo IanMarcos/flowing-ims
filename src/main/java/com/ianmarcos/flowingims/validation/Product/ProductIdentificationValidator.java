@@ -1,4 +1,4 @@
-package com.ianmarcos.flowingims.validation;
+package com.ianmarcos.flowingims.validation.Product;
 
 import com.ianmarcos.flowingims.entity.Product;
 import jakarta.validation.ConstraintValidator;

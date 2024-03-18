@@ -1,6 +1,6 @@
 package com.ianmarcos.flowingims.entity;
 
-import com.ianmarcos.flowingims.validation.ProductIdentification;
+import com.ianmarcos.flowingims.validation.Product.ProductIdentification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

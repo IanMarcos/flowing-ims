@@ -1,4 +1,4 @@
-package com.ianmarcos.flowingims.validation;
+package com.ianmarcos.flowingims.validation.Product;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

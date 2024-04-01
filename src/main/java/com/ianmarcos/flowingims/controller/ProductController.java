@@ -1,7 +1,9 @@
 package com.ianmarcos.flowingims.controller;
 
 import com.ianmarcos.flowingims.dto.NewBaseProductDTO;
+import com.ianmarcos.flowingims.dto.NewProductVariantDTO;
 import com.ianmarcos.flowingims.entity.Product;
+import com.ianmarcos.flowingims.entity.ProductVariant;
 import com.ianmarcos.flowingims.exception.ResourceNotFoundException;
 import com.ianmarcos.flowingims.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +31,7 @@ public class ProductController {
   )
   @GetMapping("")
   public List<Product> getAllProducts() {
-    return productService.findAll();
+    return productService.findAllBaseProducts();
   }
 
   @Operation(
@@ -38,7 +40,7 @@ public class ProductController {
   )
   @GetMapping("/{id}")
   public Product getById(@PathVariable int id) {
-    return productService.findById(id);
+    return productService.findBaseProductById(id);
   }
 
   @Operation(
@@ -48,7 +50,7 @@ public class ProductController {
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
   public Product createProduct(@RequestBody NewBaseProductDTO newProduct) {
-    return productService.save(newProduct);
+    return productService.saveBaseProduct(newProduct);
   }
 
   @Operation(
@@ -61,7 +63,7 @@ public class ProductController {
       throw new ResourceNotFoundException("The product doesn't exist");
     }
 
-    return productService.update(product, id);
+    return productService.updateBaseProduct(product, id);
   }
 
   @Operation(
@@ -74,6 +76,16 @@ public class ProductController {
       throw new ResourceNotFoundException("The product doesn't exist");
     }
 
-    productService.delete(id);
+    productService.disableBaseProduct(id);
+  }
+
+  @Operation(
+      summary = "Create a new product variant",
+      description = "Creates a new product specification"
+  )
+  @PostMapping("/variants")
+  @ResponseStatus(HttpStatus.CREATED)
+  public ProductVariant createProductVariant(@RequestBody NewProductVariantDTO newProduct) {
+    return productService.saveProductVariant(newProduct);
   }
 }

@@ -32,12 +32,11 @@ public class RestExceptionHandler {
   }
 
   @ExceptionHandler
-  @ResponseStatus(HttpStatus.CONFLICT)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleUniqueConstraint(DataIntegrityViolationException exception) {
     String errorMessage = exception.getMessage();
     ErrorResponse error = new ErrorResponse();
 
-    error.setStatus(HttpStatus.CONFLICT.value());
     error.setMessage(errorMessage);
     error.setTimeStamp(Instant.now());
 
@@ -45,6 +44,13 @@ public class RestExceptionHandler {
       int keyIdx = errorMessage.indexOf("Key") + 4;
       int alreadyIdx = errorMessage.indexOf("already exist") - 1;
       error.setMessage("Invalid duplicate entry: " + errorMessage.substring(keyIdx, alreadyIdx));
+      error.setStatus(HttpStatus.CONFLICT.value());
+    }
+    else {
+      int detailIdx = errorMessage.indexOf("Detail:") + 8;
+      int endIdx = errorMessage.indexOf(".]");
+      error.setMessage("Invalid resource id: " + errorMessage.substring(detailIdx, endIdx));
+      error.setStatus(HttpStatus.NOT_FOUND.value());
     }
 
     return new ResponseEntity<>(error, HttpStatus.CONFLICT);

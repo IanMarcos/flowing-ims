@@ -46,7 +46,7 @@ public class ProductService {
     Product product = productMapper.newBaseProductToProduct(newBaseProductDTO);
     if (product.getBrand() != null) {
       int inputBrandId = product.getBrand().getId();
-      Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(inputBrandId);
+      Optional<Brand> dbBrand = brandRepository.findById(inputBrandId);
 
       if (dbBrand.isPresent()) {
         product.setBrand(dbBrand.get());

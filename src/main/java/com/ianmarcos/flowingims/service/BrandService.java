@@ -22,7 +22,7 @@ public class BrandService {
   }
 
   public List<Brand> findAll() {
-    return brandRepository.findAllByEnabledTrue();
+    return brandRepository.findAll();
   }
 
   public Brand findById(int id) {
@@ -41,7 +41,7 @@ public class BrandService {
   }
 
   private Brand fetchBrand(int id) {
-    Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(id);
+    Optional<Brand> dbBrand = brandRepository.findById(id);
     if (dbBrand.isEmpty()) {
       throw new ResourceNotFoundException("The brand doesn't exist or is not active");
     }

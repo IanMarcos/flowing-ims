@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +22,17 @@ public class Target {
 
   @Id
   @Column(name = "target_id")
+  private int id;
+
+  @Column
   @Size(min = 1, max = 10)
-  private String id;
+  @NotNull
+  private String name;
+
+  @Column(name = "short_name")
+  @Size(min = 1, max = 3)
+  @NotNull
+  private String shortName;
 
   @Column(name = "created_at")
   @CreationTimestamp

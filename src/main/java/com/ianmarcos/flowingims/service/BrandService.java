@@ -40,12 +40,6 @@ public class BrandService {
     return brandRepository.save(brand);
   }
 
-  public void delete(int id) {
-    Brand brand = this.fetchBrand(id);
-    brand.setEnabled(false);
-    brandRepository.save(brand);
-  }
-
   private Brand fetchBrand(int id) {
     Optional<Brand> dbBrand = brandRepository.findByIdAndEnabledTrue(id);
     if (dbBrand.isEmpty()) {

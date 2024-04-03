@@ -66,17 +66,4 @@ public class BrandController {
 
     return brandService.updateName(id, newBrand.getName());
   }
-
-  @Operation(
-      summary = "Logically delete a brand",
-      description = "Marks the brand with the given id as disabled"
-  )
-  @DeleteMapping("/{id}")
-  public void deleteBrand(@PathVariable int id) {
-    if (id <= 0) {
-      throw new ResourceNotFoundException("The brand doesn't exist");
-    }
-
-    brandService.delete(id);
-  }
 }

@@ -1,1 +1,1 @@
-Sistema de inventarios hecho con Java y bootspring
+Sistema de inventarios hecho con Java 21 y bootspring
